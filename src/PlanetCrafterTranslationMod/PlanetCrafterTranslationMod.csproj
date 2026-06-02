@@ -1,0 +1,81 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>PlanetCrafterTranslationMod</AssemblyName>
+    <RootNamespace>PlanetCrafterTranslationMod</RootNamespace>
+    <Description>UI Translation</Description>
+    <Version>0.1.0</Version>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GameDir Condition="'$(GameDir)' == '' and '$(PLANET_CRAFTER_DIR)' != ''">$(PLANET_CRAFTER_DIR)</GameDir>
+    <GameManaged>$(GameDir)\Planet Crafter_Data\Managed</GameManaged>
+    <BepInExCore>$(GameDir)\BepInEx\core</BepInExCore>
+    <PluginFolderName>AcTePuKc UI Translation</PluginFolderName>
+    <DistDir>$(MSBuildProjectDirectory)\..\..\dist\$(PluginFolderName)</DistDir>
+    <GamePluginsDir>$(GameDir)\BepInEx\plugins\$(PluginFolderName)</GamePluginsDir>
+  </PropertyGroup>
+
+  <Import Project="..\..\User.targets" Condition="Exists('..\..\User.targets')" />
+
+  <Target Name="ValidateGameDir" BeforeTargets="ResolveReferences">
+    <Error Condition="'$(GameDir)' == ''" Text="Set GameDir in User.targets, set the PLANET_CRAFTER_DIR environment variable, or pass -p:GameDir=... when building." />
+    <Error Condition="!Exists('$(BepInExCore)\BepInEx.dll')" Text="BepInEx.dll not found. Check GameDir." />
+    <Error Condition="!Exists('$(BepInExCore)\0Harmony.dll')" Text="0Harmony.dll not found. Check GameDir." />
+    <Error Condition="!Exists('$(GameManaged)\Assembly-CSharp.dll')" Text="Assembly-CSharp.dll not found. Check GameDir." />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(BepInExCore)\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExCore)\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameManaged)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(GameManaged)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GameManaged)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(GameManaged)\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(GameManaged)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(GameManaged)\Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="translations\labels.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="StageMod" AfterTargets="Build">
+    <MakeDir Directories="$(DistDir)" />
+    <MakeDir Directories="$(DistDir)\translations" />
+    <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(DistDir)" />
+    <Copy SourceFiles="$(TargetDir)translations\labels.txt" DestinationFolder="$(DistDir)\translations" />
+
+    <MakeDir Directories="$(GamePluginsDir)" Condition="Exists('$(GameDir)')" />
+    <MakeDir Directories="$(GamePluginsDir)\translations" Condition="Exists('$(GameDir)')" />
+    <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(GamePluginsDir)" Condition="Exists('$(GameDir)')" />
+    <Copy SourceFiles="$(TargetDir)translations\labels.txt" DestinationFolder="$(GamePluginsDir)\translations" Condition="Exists('$(GameDir)')" />
+  </Target>
+</Project>
