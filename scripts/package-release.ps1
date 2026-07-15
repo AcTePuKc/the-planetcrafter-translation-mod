@@ -43,7 +43,7 @@ New-Item -ItemType Directory -Path $translationsDir -Force | Out-Null
 Copy-Item -LiteralPath $buildDllPath -Destination (Join-Path $packageRoot "PlanetCrafterTranslationMod.dll") -Force
 Copy-Item -LiteralPath $labelsPath -Destination (Join-Path $translationsDir "labels.txt") -Force
 
-Compress-Archive -Path (Join-Path $packageRoot "*") -DestinationPath $zipPath -Force
+Compress-Archive -LiteralPath $packageRoot -DestinationPath $zipPath -Force
 
 [pscustomobject]@{
     PackageRoot = (Resolve-Path -LiteralPath $packageRoot).Path
