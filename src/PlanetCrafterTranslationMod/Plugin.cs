@@ -19,7 +19,7 @@ public sealed class Plugin : BaseUnityPlugin
 {
     public const string PluginGuid = "actepukc.theplanetcrafter.uitranslationbulgarian";
     public const string PluginName = "(UI) Bulgarian Translation";
-    public const string PluginVersion = "0.2.0";
+    public const string PluginVersion = "0.2.1";
 
     internal static readonly Dictionary<string, string> Labels = new Dictionary<string, string>(StringComparer.Ordinal);
 
