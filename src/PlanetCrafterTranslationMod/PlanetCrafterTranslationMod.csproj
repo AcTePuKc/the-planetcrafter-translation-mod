@@ -6,7 +6,7 @@
     <AssemblyName>PlanetCrafterTranslationMod</AssemblyName>
     <RootNamespace>PlanetCrafterTranslationMod</RootNamespace>
     <Description>UI Translation</Description>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <ImplicitUsings>disable</ImplicitUsings>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GameDir Condition="'$(GameDir)' == '' and '$(PLANET_CRAFTER_DIR)' != ''">$(PLANET_CRAFTER_DIR)</GameDir>
