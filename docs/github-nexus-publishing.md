@@ -48,7 +48,9 @@ git status --short
 3. Create a GitHub Release with the ZIP attached.
 4. The `Publish Nexus From Release` workflow downloads the ZIP.
 5. `release/nexus-description.txt` is sent as the Nexus file description.
-6. The GitHub Release body is sent as the Nexus changelog.
+6. `release/nexus-changelog.txt` is sent as the Nexus changelog. Keep it in Bulgarian, with one change per line and no Markdown bullet prefixes.
 7. The workflow uploads a new version to the configured Nexus file.
 
 The Nexus upload action must use the current v3 input names: `file_id`, `category`, and `archive_existing_version`. The changelog additionally requires `mod_id` and `changelog`.
+
+The GitHub Release body is independent from the Nexus changelog. It may contain English Markdown release notes for GitHub; it is not used as the Nexus changelog.
