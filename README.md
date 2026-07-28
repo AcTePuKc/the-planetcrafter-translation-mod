@@ -105,6 +105,8 @@ The Nexus upload uses the official `Nexus-Mods/upload-action@v1.0.0-beta.10`. Th
 
 The workflow can also be started manually with `workflow_dispatch` and a release tag such as `v0.2.2`.
 
+For the complete ID lookup and release procedure, see [`docs/github-nexus-publishing.md`](docs/github-nexus-publishing.md).
+
 ## Sharing Rules
 
 Safe to share:
