@@ -88,7 +88,7 @@ This project expects local game/BepInEx assemblies from an installed copy of the
 To rebuild a clean staged `dist/` folder:
 
 ```powershell
-.\scripts\package-release.ps1 -Version 0.2.0
+.\scripts\package-release.ps1 -Version 0.2.2
 ```
 
 The script creates `dist/PlanetCrafterTranslationMod-<version>.zip`, which is the archive uploaded to Nexus Mods.
@@ -98,9 +98,12 @@ The script creates `dist/PlanetCrafterTranslationMod-<version>.zip`, which is th
 The repository includes a GitHub Actions workflow that publishes the matching release archive to Nexus after a GitHub Release is published. Add these repository secrets before using it:
 
 - `NEXUS_API_KEY`
-- `NEXUS_FILE_GROUP_ID`
+- `NEXUS_FILE_ID` - the Nexus file ID for the file whose versions should be updated.
+- `NEXUS_MOD_ID` - the Nexus mod ID used when adding the release changelog.
 
-The workflow can also be started manually with `workflow_dispatch` and a release tag such as `v0.2.0`.
+The Nexus upload uses the official `Nexus-Mods/upload-action@v1.0.0-beta.10`. The fixed file description is read from `release/nexus-description.txt`; the changelog is read from the published GitHub Release body.
+
+The workflow can also be started manually with `workflow_dispatch` and a release tag such as `v0.2.2`.
 
 ## Sharing Rules
 

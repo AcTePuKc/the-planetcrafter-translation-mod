@@ -1,0 +1,1 @@
+Bulgarian localization for The Planet Crafter. Standalone BepInEx plugin that adds Bulgarian language support and loads translated UI and game text from labels.txt. Updated for Development Branch 2.102. No additional translation mods or manual BepInEx.cfg edits are required. No original game files or localization dumps are included.

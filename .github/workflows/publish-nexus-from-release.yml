@@ -45,7 +45,7 @@ jobs:
             throw "A GitHub release tag is required."
           }
 
-          $release = gh release view $tag --repo $env:REPOSITORY --json tagName | ConvertFrom-Json
+          $release = gh release view $tag --repo $env:REPOSITORY --json tagName,body | ConvertFrom-Json
           $version = $release.tagName.TrimStart("v")
 
           if ([string]::IsNullOrWhiteSpace($version)) {
@@ -54,6 +54,13 @@ jobs:
 
           "tag=$($release.tagName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $description = (Get-Content -LiteralPath "release/nexus-description.txt" -Raw).Trim()
+          "nexus_description<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $description | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "changelog<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $release.body | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Download release archive
         id: download
@@ -75,15 +82,18 @@ jobs:
           "asset_path=$($archives[0].FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Publish to Nexus Mods
-        uses: Nexus-Mods/upload-action@v1.0.0-beta.7
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.10
         with:
           api_key: ${{ secrets.NEXUS_API_KEY }}
-          file_group_id: ${{ secrets.NEXUS_FILE_GROUP_ID }}
+          file_id: ${{ secrets.NEXUS_FILE_ID }}
           filename: ${{ steps.download.outputs.asset_path }}
           version: ${{ steps.release.outputs.version }}
+          description: ${{ steps.release.outputs.nexus_description }}
+          mod_id: ${{ secrets.NEXUS_MOD_ID }}
+          changelog: ${{ steps.release.outputs.changelog }}
           display_name: PlanetCrafterTranslationMod ${{ steps.release.outputs.version }}
-          file_category: main
-          archive_existing_file: true
+          category: main
+          archive_existing_version: true
           primary_mod_manager_download: true
           allow_mod_manager_download: true
           show_requirements_pop_up: false
